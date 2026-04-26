@@ -1,0 +1,53 @@
+.prompts {
+    &__row {
+        display: flex;
+        gap: 20px;
+
+        >div {
+            flex: 1;
+            min-width: 0;
+        }
+    }
+
+    &__card {
+        background: #f5f6fa;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 0;
+    }
+
+    &__card-header {
+        padding: 12px 16px;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    &__card-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        span {
+            font-size: 14px;
+            font-weight: 600;
+            color: #111827;
+            white-space: nowrap;
+        }
+    }
+
+    &__divider {
+        flex: 1;
+        height: 1px;
+        background-color: #e5e7eb;
+    }
+
+    &__content-box {
+        margin: 16px;
+        padding: 12px;
+        border: 1px solid #e5e7eb;
+        border-radius: 6px;
+        background: #ffffff;
+        font-size: 14px;
+        color: #374151;
+        line-height: 1.5;
+    }
+}
