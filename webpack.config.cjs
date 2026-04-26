@@ -9,7 +9,7 @@ module.exports = {
         historyApiFallback: true,
     },
     output: {
-        publicPath: "http://localhost:3001/",
+        publicPath: "https://mohammedazhar3626.github.io/playground-mfe/",
     },
     resolve: {
         extensions: [".tsx", ".ts", ".js"],
