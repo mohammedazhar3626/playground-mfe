@@ -1,11 +1,18 @@
 import { useEffect, useState } from "react"
+import { toast } from "react-toastify"
+import { useSavedPrompts } from "shell/savedPromptsStore"
 
 type Props = {
     id?: string
+    onDeleteSuccess: () => void
 }
 
-const SavedPromptDetail = ({ id }: Props) => {
+const SavedPromptDetail = ({ id, onDeleteSuccess }: Props) => {
     const [prompt, setPrompt] = useState<any>(null)
+
+    const savedPrompts = useSavedPrompts((state: any) => state.savedPrompts)
+    const removePrompt = useSavedPrompts((state: any) => state.removePrompt)
+
 
     useEffect(() => {
         if (!id) return
@@ -14,14 +21,24 @@ const SavedPromptDetail = ({ id }: Props) => {
         setPrompt(found || null)
     }, [id])
 
-    if (!prompt) {
+    const promptFound = savedPrompts.find((p: any) => p.id === Number(id)) || null
+
+    if (!promptFound) {
         return <div style={{ padding: 20 }}>No prompt found</div>
+    }
+
+    const handleDelete = () => {
+        removePrompt(Number(id))
+        window.dispatchEvent(new Event("savedPromptsUpdated"))
+        toast.success("Prompt deleted successfully")
+        onDeleteSuccess()
     }
 
     return (
         <div style={{ padding: 20 }}>
             <h2>Saved Prompt</h2>
-            <pre>{prompt.text}</pre>
+            <pre>{prompt?.text || ""}</pre>
+            <button onClick={handleDelete}>Delete</button>
         </div>
     )
 }

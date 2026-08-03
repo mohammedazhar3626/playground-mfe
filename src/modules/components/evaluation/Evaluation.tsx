@@ -22,6 +22,7 @@ const Evaluation = ({ evaluation, output }: Props) => {
     const handleSavePrompt = () => {
         const newPrompt = {
             id: Date.now(),
+            key: output.trim().toLowerCase(),
             text: output,
             label: getPromptLabel(output),
             icon: "SquarePlus"
