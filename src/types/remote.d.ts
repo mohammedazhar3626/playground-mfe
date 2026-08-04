@@ -4,3 +4,7 @@ declare module "shell/authStore" {
 declare module "shell/savedPromptsStore" {
     export const useSavedPrompts: any
 }
+declare module "shell/ConfirmModal" {
+    const ConfirmModal: any
+    export default ConfirmModal
+}
