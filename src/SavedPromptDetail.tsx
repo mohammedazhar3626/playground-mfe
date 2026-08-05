@@ -2,7 +2,8 @@ import { useState } from "react"
 import { toast } from "react-toastify"
 import { useSavedPrompts } from "shell/savedPromptsStore"
 import ConfirmModal from "shell/ConfirmModal"
-
+import { getCurrentVersion, sortVersions } from "shell/utils"
+import "./SavedPromptDetail.scss"
 type Props = {
     id?: string
     onDeleteSuccess: () => void
@@ -22,6 +23,8 @@ const SavedPromptDetail = ({ id, onDeleteSuccess }: Props) => {
         return <div style={{ padding: 20 }}>No prompt found</div>
     }
 
+    const currentVersion = getCurrentVersion(promptFound)
+
     const handleDelete = () => {
         removePrompt(Number(id))
         window.dispatchEvent(new Event("savedPromptsUpdated"))
@@ -33,7 +36,22 @@ const SavedPromptDetail = ({ id, onDeleteSuccess }: Props) => {
         <>
             <div style={{ padding: 20 }}>
                 <h2>Saved Prompt</h2>
-                <pre>{promptFound.text || ""}</pre>
+                <p>Current Version:<strong>{" "}V{promptFound.currentVersion}</strong></p>
+                <pre>{currentVersion?.text || ""}</pre>
+                <h3>Version History</h3>
+                <ul className="version-list">
+                    {sortVersions(promptFound).map((version) => (
+                        <li key={version.id} className={version.version === promptFound.currentVersion ? "active" : ""}>
+                            <div>
+                                <strong>
+                                    Version{version.version}
+                                </strong>
+                                {version.version === promptFound.currentVersion && "(Current)"}
+                            </div>
+                            <small>{new Date(version.createdAt).toLocaleString()}</small>
+                        </li>
+                    ))}
+                </ul>
                 <button onClick={() => setShowDeleteModal(true)}>Delete</button>
                 <ConfirmModal
                     open={showDeleteModal}

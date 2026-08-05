@@ -1,0 +1,27 @@
+.version-list {
+    margin-top: 24px;
+    list-style: none;
+    padding: 0;
+}
+
+.version-list li {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.version-list li:hover {
+    background: #f5f7fb;
+}
+
+.version-list li.active {
+    border-color: #2563eb;
+    background: #eff6ff;
+}
+
+.version-list small {
+    color: #666;
+}

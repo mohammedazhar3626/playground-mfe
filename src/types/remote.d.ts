@@ -8,3 +8,18 @@ declare module "shell/ConfirmModal" {
     const ConfirmModal: any
     export default ConfirmModal
 }
+
+declare module "shell/utils" {
+
+    export type PromptVersion = {
+        id: number
+        version: number
+        text: string
+        createdAt: string
+    }
+    export const getNextVersion: (prompt: any) => any
+    export const getCurrentVersion: (prompt: any) => PromptVersion | undefined
+    export const isPromptChanged: (prompt: any, text: string) => boolean
+    export const getVersionByNumber: (prompt: any, version: number) => any
+    export const sortVersions: (prompt: any) => any[]
+}

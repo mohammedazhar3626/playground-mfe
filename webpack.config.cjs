@@ -34,7 +34,7 @@ module.exports = {
             filename: "remoteEntry.js",
             exposes: {
                 "./Playground": "./src/App",
-                "./SavedPromptDetail": "./src/SavedPromptDetail"
+                "./SavedPromptDetail": "./src/SavedPromptDetail.tsx",
             },
             remotes: {
                 shell: "shell@http://localhost:3000/remoteEntry.js"

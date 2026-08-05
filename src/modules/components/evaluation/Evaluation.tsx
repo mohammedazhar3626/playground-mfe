@@ -14,20 +14,27 @@ type Props = {
 }
 
 const Evaluation = ({ evaluation, output }: Props) => {
-    const { addPrompt } = useSavedPrompts()
+    const { addPrompt, createVersion, savedPrompts } = useSavedPrompts()
     if (!evaluation) return null
 
     const stars = "★".repeat(Math.round(evaluation.score))
 
     const handleSavePrompt = () => {
+        const normalizedText = output.trim()
+        const existingKeyText = savedPrompts.find((p: any) => p.versions.some((v: any) => v.text.trim() === normalizedText))
         const newPrompt = {
             id: Date.now(),
-            key: output.trim().toLowerCase(),
-            text: output,
-            label: getPromptLabel(output),
+            key: existingKeyText?.key ?? `prompt-${Date.now()}`,
+            text: normalizedText,
+            label: getPromptLabel(normalizedText),
             icon: "SquarePlus"
         }
-        addPrompt(newPrompt)
+        const existingPrompt = savedPrompts.find((p: any) => p.key === newPrompt.key)
+        if (existingPrompt) {
+            createVersion(existingPrompt.id, newPrompt.text)
+        } else {
+            addPrompt(newPrompt)
+        }
         window.dispatchEvent(new Event("savedPromptsUpdated"))
     }
 
