@@ -1,7 +1,9 @@
 import { useSavedPrompts } from "shell/savedPromptsStore"
 import { getPromptLabel } from "../../../utils/getPromptLabel"
+import { usePlayground } from "../../../hooks/usePlayground"
 import "./Evaluation.scss"
 
+type PlaygrounState = ReturnType<typeof usePlayground>
 type Props = {
     evaluation: {
         score: number
@@ -10,36 +12,53 @@ type Props = {
         feedback: string
         prompt: string
     } | null
-    output: string
+    playground: PlaygrounState
+    isEditMode: any
 }
 
-const Evaluation = ({ evaluation, output }: Props) => {
+const Evaluation = ({ evaluation, playground, isEditMode }: Props) => {
     const { addPrompt, createVersion, savedPrompts } = useSavedPrompts()
     if (!evaluation) return null
 
     const stars = "★".repeat(Math.round(evaluation.score))
 
     const handleSavePrompt = () => {
-        const normalizedText = output.trim()
+        const normalizedText = playground.output.trim()
         const existingKeyText = savedPrompts.find((p: any) => p.versions.some((v: any) => v.text.trim() === normalizedText))
         const newPrompt = {
             id: Date.now(),
             key: existingKeyText?.key ?? `prompt-${Date.now()}`,
-            text: normalizedText,
             label: getPromptLabel(normalizedText),
-            icon: "SquarePlus"
+            icon: "SquarePlus",
+            prompt: playground.prompt,
+            systemPrompt: playground.systemPrompt,
+            userPrompt: playground.userPrompt,
+            output: playground.output,
+            text: normalizedText,
         }
         const existingPrompt = savedPrompts.find((p: any) => p.key === newPrompt.key)
         if (existingPrompt) {
-            createVersion(existingPrompt.id, newPrompt.text)
+            createVersion(existingPrompt.id, {
+                prompt: playground.prompt,
+                systemPrompt: playground.systemPrompt,
+                userPrompt: playground.userPrompt,
+                output: playground.output,
+                text: normalizedText,
+            })
+            playground.reset()
+            window.dispatchEvent(
+                new CustomEvent("prompt-version-created", {
+                    detail: {
+                        id: existingPrompt.id
+                    }
+                })
+            )
         } else {
             addPrompt(newPrompt)
+            playground.reset()
         }
         window.dispatchEvent(new Event("savedPromptsUpdated"))
     }
-
-    console.log('MFE', useSavedPrompts.getState().savedPrompts);
-
 
     return (
         <div className="playground__card evaluation">
@@ -48,7 +67,7 @@ const Evaluation = ({ evaluation, output }: Props) => {
                     Results & Evaluation
                 </h3>
                 <div className="evaluation__actions">
-                    <button className="btn-primary" onClick={handleSavePrompt}>Save Prompt</button>
+                    <button className="btn-primary" onClick={handleSavePrompt}>{isEditMode ? "Save Version" : "Save Prompt"}</button>
                     <button className="btn-secondary">A/B Test Prompt</button>
                 </div>
             </div>
