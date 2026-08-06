@@ -1,10 +1,29 @@
-.version-list {
+.saved-prompt-detail__history {
     margin-top: 24px;
-    list-style: none;
-    padding: 0;
 }
 
-.version-list li {
+.saved-prompt-detail__history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.saved-prompt-detail__actions {
+    display: flex;
+    gap: 12px;
+}
+
+.saved-prompt-detail__version-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    overflow-y: auto;
+    height: calc(100vh - 360px);
+}
+
+.saved-prompt-detail__version-item {
     padding: 12px;
     border: 1px solid #ddd;
     border-radius: 8px;
@@ -13,15 +32,67 @@
     transition: .2s;
 }
 
-.version-list li:hover {
+.saved-prompt-detail__version-item:hover {
     background: #f5f7fb;
 }
 
-.version-list li.active {
+.saved-prompt-detail__version-item.active {
     border-color: #2563eb;
     background: #eff6ff;
 }
 
-.version-list small {
+.saved-prompt-detail__version-item small {
     color: #666;
+}
+
+.saved-prompt-detail__actions {
+    display: flex;
+    gap: 12px;
+}
+
+.saved-prompt-detail__action-button {
+    min-width: 96px;
+    height: 40px;
+    padding: 0 16px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid #2563eb;
+    border-radius: 8px;
+
+    background: #2563eb;
+    color: #fff;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+    transition: all .2s ease;
+}
+
+.saved-prompt-detail__action-button:hover {
+    background: #1d4ed8;
+    border-color: #1d4ed8;
+}
+
+.saved-prompt-detail__action-button:active {
+    transform: translateY(1px);
+}
+
+.saved-prompt-detail__action-button:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+.saved-prompt-detail__action-button--danger {
+    background: #fff;
+    color: #dc2626;
+    border-color: #dc2626;
+}
+
+.saved-prompt-detail__action-button--danger:hover {
+    background: #dc2626;
+    color: #fff;
 }

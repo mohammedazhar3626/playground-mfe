@@ -41,21 +41,33 @@ export const usePlayground = () => {
         }
     }
 
+    const reset = () => {
+        setPrompt("")
+        setSystemPrompt("")
+        setUserPrompt("")
+        setOutput("")
+        setEvaluation(null)
+    }
+
     return {
         model,
         temperature,
         tokens,
         prompt,
         output,
+        setOutput,
         setModel,
         setTemperature,
         setTokens,
         setPrompt,
         systemPrompt,
+        setSystemPrompt,
         userPrompt,
+        setUserPrompt,
         handleRun,
         loading,
         isStreaming,
-        evaluation
+        evaluation,
+        reset
     }
 }
