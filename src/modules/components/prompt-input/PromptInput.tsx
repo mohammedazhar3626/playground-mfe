@@ -20,7 +20,9 @@ const PromptInput = ({ prompt, setPrompt, handleRun, loading }: Props) => {
                 id="textarea"
                 className="prompt-input__textarea"
                 value={prompt}
-                onChange={(e) => setPrompt(e.target.value)}
+                onChange={(e) => {
+                    setPrompt(e.target.value)
+                }}
                 placeholder="Enter your prompt..."
             />
             <div className="prompt-input__actions">

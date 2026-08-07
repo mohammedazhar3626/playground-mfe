@@ -12,6 +12,10 @@ export const usePlayground = () => {
     const [loading, setLoading] = useState(false)
     const [isStreaming, setIsStreaming] = useState(false)
     const [evaluation, setEvaluation] = useState<any>(null)
+    const [hasRunTest, setHasRunTest] = useState(false)
+
+    const markDirty = () => setHasRunTest(true)
+    const clearDirty = () => setHasRunTest(false)
 
     const streamText = async (text: string) => {
         let result = ""
@@ -34,6 +38,7 @@ export const usePlayground = () => {
             setUserPrompt(res.userPrompt)
             await streamText(res.output)
             setEvaluation(res.evaluation)
+            markDirty()
         } catch (e) {
             console.error(e)
         } finally {
@@ -47,6 +52,7 @@ export const usePlayground = () => {
         setUserPrompt("")
         setOutput("")
         setEvaluation(null)
+        clearDirty()
     }
 
     return {
@@ -68,6 +74,9 @@ export const usePlayground = () => {
         loading,
         isStreaming,
         evaluation,
+        hasRunTest,
+        markDirty,
+        clearDirty,
         reset
     }
 }

@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import PlaygroundHeader from '../../modules/components/playground-header/PlaygroundHeader'
 import PromptInput from '../../modules/components/prompt-input/PromptInput'
@@ -16,6 +16,12 @@ import OutputPreview from '../../modules/components/output-preview/OutputPreview
 import Evaluation from '../../modules/components/evaluation/Evaluation'
 
 
+const notifyDirtyChanged = (dirty: boolean) => {
+    window.dispatchEvent(new CustomEvent("playground-dirty-change", {
+        detail: dirty
+    }))
+}
+
 const Playground = () => {
     const playground = usePlayground()
     const evaluationRef = useRef<HTMLDivElement | null>(null)
@@ -28,6 +34,26 @@ const Playground = () => {
 
     const isEditMode = !!editId
     const savedPrompts = useSavedPrompts((state: any) => state.savedPrompts)
+
+
+    useEffect(() => {
+        notifyDirtyChanged(playground.hasRunTest)
+    }, [playground.hasRunTest])
+
+    useEffect(() => {
+        return () => { notifyDirtyChanged(false) }
+    }, [])
+
+
+    useEffect(() => {
+        const handler = (e: BeforeUnloadEvent) => {
+            if (!playground.hasRunTest) return
+            e.preventDefault()
+            e.returnValue = ""
+        }
+        window.addEventListener("beforeunload", handler)
+        return () => window.removeEventListener("beforeunload", handler)
+    }, [playground.hasRunTest])
 
     useEffect(() => {
         if (!editId) {
@@ -45,6 +71,7 @@ const Playground = () => {
         playground.setSystemPrompt(versionToEdit.systemPrompt)
         playground.setUserPrompt(versionToEdit.userPrompt)
         playground.setOutput(versionToEdit.output)
+        playground.clearDirty()
     }, [editId, savedPrompts])
 
     useEffect(() => {
